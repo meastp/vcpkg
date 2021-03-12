@@ -5,7 +5,7 @@ parameters:
   - name: use_custom_triplet
     displayName: Use custom triplet
     type: boolean
-    default: false
+    default: true
   - name: sdk_version
     displayName: Whick Windows SDK version to use (requires custom triplet)
     type: string
@@ -27,7 +27,7 @@ steps:
       set(VCPKG_LIBRARY_LINKAGE dynamic)
       set(VCPKG_PLATFORM_TOOLSET v142)
       set(VCPKG_CMAKE_SYSTEM_VERSION {0}})
-      '@ -f ${{ parameters.sdk_version }}
+      '@ -f '${{ parameters.sdk_version }}'
       
       $content | Out-File -Encoding ASCII -FilePath "$(Build.SourcesDirectory)\triplets\x64-windows-v142.cmake"
     displayName: 'Make custom triplet x64-windows-v142'
