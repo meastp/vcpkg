@@ -1,5 +1,5 @@
 pool:
-  vmImage: windows-vs2019
+  vmImage: windows-latest
 
 steps:
 - powershell: |
