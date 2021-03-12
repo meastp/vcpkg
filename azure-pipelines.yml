@@ -35,10 +35,10 @@ steps:
       & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
     displayName: 'Install dbghelp'
 
-- publish: C:\vcpkg\buildtrees\dbghelp
+- publish: buildtrees\dbghelp
   artifact: vcpkg-buildtrees-dbghelp
   condition: always()
 
-- publish: C:\vcpkg\buildtrees\crashrpt
+- publish: buildtrees\crashrpt
   artifact: vcpkg-buildtrees-crashrpt
   condition: always()
