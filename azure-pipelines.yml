@@ -32,7 +32,7 @@ steps:
       $content | Out-File -Encoding ASCII -FilePath "$(Build.SourcesDirectory)\triplets\x64-windows-v142.cmake"
     displayName: 'Make custom triplet x64-windows-v142'
     env:
-      SDK_VERSION : ${{ parameter.sdk_version }}
+      SDK_VERSION : ${{ parameters.sdk_version }}
   - powershell: |
       & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
     displayName: 'Install dbghelp'
