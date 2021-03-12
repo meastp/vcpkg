@@ -34,8 +34,12 @@ steps:
     env:
       SDK_VERSION : ${{ parameters.sdk_version }}
   - powershell: |
-      & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
+      & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows-v142 --overlay-triplets=.\triplets --debug
     displayName: 'Install dbghelp'
+  
+  - publish: triplets
+    artifact: vcpkg-buildtrees-triplets
+    condition: always()
 
 - publish: buildtrees\dbghelp
   artifact: vcpkg-buildtrees-dbghelp
