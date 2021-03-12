@@ -27,10 +27,12 @@ steps:
       set(VCPKG_LIBRARY_LINKAGE dynamic)
       set(VCPKG_PLATFORM_TOOLSET v142)
       set(VCPKG_CMAKE_SYSTEM_VERSION {0}})
-      '@ -f '${{ parameters.sdk_version }}'
+      '@ -f $env:SDK_VERSION
       
       $content | Out-File -Encoding ASCII -FilePath "$(Build.SourcesDirectory)\triplets\x64-windows-v142.cmake"
     displayName: 'Make custom triplet x64-windows-v142'
+    env:
+      SDK_VERSION : ${{ parameter.sdk_version }}
   - powershell: |
       & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
     displayName: 'Install dbghelp'
