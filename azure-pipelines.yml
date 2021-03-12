@@ -1,12 +1,44 @@
 pool:
   vmImage: windows-latest
 
+parameters:
+  - name: use_custom_triplet
+    displayName: Use custom triplet
+    type: boolean
+    default: false
+  - name: sdk_version
+    displayName: Whick Windows SDK version to use (requires custom triplet)
+    type: string
+    default: 10.0.17134.0
 steps:
 - powershell: |
     & C:\vcpkg\bootstrap-vcpkg.bat
     & C:\vcpkg\vcpkg.exe integrate install
   displayName: 'Add user-wide vcpkg integration'
+- ${{ if eq(parameters.use_custom_triplet, false)}}:
+  - powershell: |
+      & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
+    displayName: 'Install dbghelp'
+- ${{ if eq(parameters.use_custom_triplet, true)}}:
+  - powershell: |
+      $content = @'
+      set(VCPKG_TARGET_ARCHITECTURE x64)
+      set(VCPKG_CRT_LINKAGE dynamic)
+      set(VCPKG_LIBRARY_LINKAGE dynamic)
+      set(VCPKG_PLATFORM_TOOLSET v142)
+      set(VCPKG_CMAKE_SYSTEM_VERSION {0}})
+      '@ -f ${{ parameters.sdk_version }}
+      
+      $content | Out-File -Encoding ASCII -FilePath "$(Build.SourcesDirectory)\triplets\x64-windows-v142.cmake"
+    displayName: 'Make custom triplet x64-windows-v142'
+  - powershell: |
+      & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
+    displayName: 'Install dbghelp'
 
-- powershell: |
-    & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows --debug
-  displayName: 'Install dbghelp'
+- publish: C:\vcpkg\buildtrees\dbghelp
+  artifact: vcpkg-buildtrees-dbghelp
+  condition: always()
+
+- publish: C:\vcpkg\buildtrees\crashrpt
+  artifact: vcpkg-buildtrees-crashrpt
+  condition: always()
