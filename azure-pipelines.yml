@@ -1,0 +1,12 @@
+pool:
+  vmImage: windows-vs2019
+
+steps:
+- powershell: |
+    & C:\vcpkg\bootstrap-vcpkg.bat
+    & C:\vcpkg\vcpkg.exe integrate install
+  displayName: 'Add user-wide vcpkg integration'
+
+- powershell: |
+    & C:\vcpkg\vcpkg.exe install dbghelp:x64-windows
+  displayName: 'Install dbghelp'
