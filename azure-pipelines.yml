@@ -8,5 +8,5 @@ steps:
   displayName: 'Add user-wide vcpkg integration'
 
 - powershell: |
-    & C:\vcpkg\vcpkg.exe install dbghelp:x64-windows
+    & C:\vcpkg\vcpkg.exe install crashrpt:x64-windows
   displayName: 'Install dbghelp'
